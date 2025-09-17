@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Jogo - Organização</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+    h1 { text-align: center; }
+    .cenario { margin: 20px 0; padding: 15px; background: #fff; border-radius: 8px; }
+    button { display: block; margin: 10px 0; padding: 10px; width: 100%; border: none; border-radius: 6px; background: #007bff; color: #fff; font-size: 16px; }
+    button:hover { background: #0056b3; }
+    #resultado { margin-top: 20px; font-weight: bold; font-size: 18px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 O Guardião do Estoque</h1>
+  <p>Sua missão é manter os materiais organizados e administrar bem os suprimentos!</p>
+
+  <div id="jogo"></div>
+  <p id="resultado"></p>
+
+  <script>
+    const cenarios = [
+      {
+        pergunta: "🚚 Chegada do caminhão: os itens não foram conferidos e a equipe está ocupada. O que você faz?",
+        opcoes: [
+          { texto: "A) Recebe tudo sem conferir.", pontos: 0 },
+          { texto: "B) Para parte da equipe e confere antes de guardar.", pontos: 10 },
+          { texto: "C) Deixa no corredor e confere depois.", pontos: 5 }
+        ]
+      },
+      {
+        pergunta: "📦 Estoque bagunçado: caixas sem identificação. O que você faz?",
+        opcoes: [
+          { texto: "A) Deixa como está.", pontos: 0 },
+          { texto: "B) Organiza e etiqueta tudo.", pontos: 10 },
+          { texto: "C) Empilha mais coisas em cima.", pontos: 5 }
+        ]
+      },
+      {
+        pergunta: "📝 Material em falta: papel quase acabando. O que você faz?",
+        opcoes: [
+          { texto: "A) Entrega só o que tem.", pontos: 5 },
+          { texto: "B) Anota a falta e prepara pedido de reposição.", pontos: 10 },
+          { texto: "C) Pega emprestado sem avisar.", pontos: 0 }
+        ]
+      },
+      {
+        pergunta: "⚡ Pedido urgente: gerente precisa de 20 itens que você não lembra onde guardou. O que faz?",
+        opcoes: [
+          { texto: "A) Procura em tudo até achar.", pontos: 5 },
+          { texto: "B) Usa sistema de registro para localizar rápido.", pontos: 10 },
+          { texto: "C) Diz que não tem.", pontos: 0 }
+        ]
+      }
+    ];
+
+    let pontos = 0;
+    let atual = 0;
+
+    function mostrarCenario() {
+      if (atual >= cenarios.length) {
+        let msg = "";
+        if (pontos >= 30) msg = "🏆 Você é um Gestor de Estoque Nota 10!";
+        else msg = "⚠️ Precisa melhorar suas práticas de organização.";
+        document.getElementById("jogo").innerHTML = "";
+        document.getElementById("resultado").innerText = `Fim de jogo! Você fez ${pontos} pontos. ${msg}`;
+        return;
+      }
+
+      const c = cenarios[atual];
+      let html = `<div class="cenario"><p><b>${c.pergunta}</b></p>`;
+      c.opcoes.forEach((opcao, i) => {
+        html += `<button onclick="escolher(${i})">${opcao.texto}</button>`;
+      });
+      html += "</div>";
+      document.getElementById("jogo").innerHTML = html;
+    }
+
+    function escolher(i) {
+      pontos += cenarios[atual].opcoes[i].pontos;
+      atual++;
+      mostrarCenario();
+    }
+
+    mostrarCenario();
+  </script>
+</body>
+</html>
