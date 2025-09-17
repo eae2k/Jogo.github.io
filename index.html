@@ -8,12 +8,12 @@
       font-family: Arial, sans-serif;
       padding: 20px;
       background: #f0f8ff;
-      font-size: 20px;
-      line-height: 1.6;
+      font-size: 24px;
+      line-height: 1.8;
     }
     h1 {
       text-align: center;
-      font-size: 28px;
+      font-size: 32px;
       margin-bottom: 10px;
     }
     .cenario {
@@ -26,13 +26,13 @@
     button {
       display: block;
       margin: 12px 0;
-      padding: 15px;
+      padding: 18px;
       width: 100%;
       border: none;
       border-radius: 10px;
       background: #007bff;
       color: #fff;
-      font-size: 20px;
+      font-size: 24px;
       cursor: pointer;
       transition: background 0.3s;
     }
@@ -42,11 +42,16 @@
     #resultado {
       margin-top: 25px;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 28px;
+      text-align: center;
+    }
+    #feedback {
+      font-size: 22px;
+      margin: 10px 0;
       text-align: center;
     }
     #progresso {
-      height: 20px;
+      height: 25px;
       background: #ddd;
       border-radius: 10px;
       overflow: hidden;
@@ -67,6 +72,7 @@
 
 <div id="progresso"><div id="barra"></div></div>
 <div id="jogo"></div>
+<div id="feedback"></div>
 <p id="resultado"></p>
 
 <script>
@@ -74,33 +80,57 @@ const cenarios = [
   {
     pergunta: "🚚 Chegada do caminhão: os itens não foram conferidos e a equipe está ocupada. O que você faz?",
     opcoes: [
-      { texto: "A) Recebe tudo sem conferir.", pontos: 0 },
-      { texto: "B) Para parte da equipe e confere antes de guardar.", pontos: 10 },
-      { texto: "C) Deixa no corredor e confere depois.", pontos: 5 }
+      { texto: "A) Recebe tudo sem conferir.", pontos: 0, feedback: "❌ Perigoso! Pode gerar erros no estoque." },
+      { texto: "B) Para parte da equipe e confere antes de guardar.", pontos: 10, feedback: "✔️ Excelente! Conferir evita problemas." },
+      { texto: "C) Deixa no corredor e confere depois.", pontos: 5, feedback: "⚠️ Melhor que nada, mas ainda arriscado." }
     ]
   },
   {
     pergunta: "📦 Estoque bagunçado: caixas sem identificação. O que você faz?",
     opcoes: [
-      { texto: "A) Deixa como está.", pontos: 0 },
-      { texto: "B) Organiza e etiqueta tudo.", pontos: 10 },
-      { texto: "C) Empilha mais coisas em cima.", pontos: 5 }
+      { texto: "A) Deixa como está.", pontos: 0, feedback: "❌ Isso dificulta encontrar materiais." },
+      { texto: "B) Organiza e etiqueta tudo.", pontos: 10, feedback: "✔️ Muito bom! Facilita o controle." },
+      { texto: "C) Empilha mais coisas em cima.", pontos: 5, feedback: "⚠️ Pode gerar confusão depois." }
     ]
   },
   {
     pergunta: "📝 Material em falta: papel quase acabando. O que você faz?",
     opcoes: [
-      { texto: "A) Entrega só o que tem.", pontos: 5 },
-      { texto: "B) Anota a falta e prepara pedido de reposição.", pontos: 10 },
-      { texto: "C) Pega emprestado sem avisar.", pontos: 0 }
+      { texto: "A) Entrega só o que tem.", pontos: 5, feedback: "⚠️ Risco de faltar para o setor." },
+      { texto: "B) Anota a falta e prepara pedido de reposição.", pontos: 10, feedback: "✔️ Ótimo! Antecipar problemas é importante." },
+      { texto: "C) Pega emprestado sem avisar.", pontos: 0, feedback: "❌ Pode gerar conflitos com outros setores." }
     ]
   },
   {
     pergunta: "⚡ Pedido urgente: gerente precisa de 20 itens que você não lembra onde guardou. O que faz?",
     opcoes: [
-      { texto: "A) Procura em tudo até achar.", pontos: 5 },
-      { texto: "B) Usa sistema de registro para localizar rápido.", pontos: 10 },
-      { texto: "C) Diz que não tem.", pontos: 0 }
+      { texto: "A) Procura em tudo até achar.", pontos: 5, feedback: "⚠️ Demorado, mas você vai achar." },
+      { texto: "B) Usa sistema de registro para localizar rápido.", pontos: 10, feedback: "✔️ Excelente! Sistema organizado ajuda muito." },
+      { texto: "C) Diz que não tem.", pontos: 0, feedback: "❌ Mentir só piora a situação." }
+    ]
+  },
+  {
+    pergunta: "🗂️ Materiais vencidos encontrados no estoque. O que faz?",
+    opcoes: [
+      { texto: "A) Ignora e mantém no estoque.", pontos: 0, feedback: "❌ Perigoso! Pode causar desperdício." },
+      { texto: "B) Separa e descarta adequadamente.", pontos: 10, feedback: "✔️ Certo! Segurança e organização em primeiro lugar." },
+      { texto: "C) Usa para setores sem controle.", pontos: 5, feedback: "⚠️ Pode gerar problemas futuros." }
+    ]
+  },
+  {
+    pergunta: "📊 Pedido entregue fora do prazo. Como reage?",
+    opcoes: [
+      { texto: "A) Reclama e não registra nada.", pontos: 0, feedback: "❌ Sem registro, o problema pode se repetir." },
+      { texto: "B) Atualiza o sistema e ajusta cronograma.", pontos: 10, feedback: "✔️ Ótimo! Mantém o controle do estoque e prazos." },
+      { texto: "C) Ignora e segue adiante.", pontos: 5, feedback: "⚠️ Pode prejudicar o planejamento." }
+    ]
+  },
+  {
+    pergunta: "📦 Estoque excessivo de um material. O que você faz?",
+    opcoes: [
+      { texto: "A) Armazena tudo sem controle.", pontos: 0, feedback: "❌ Pode causar desperdício e confusão." },
+      { texto: "B) Redistribui para setores que precisam.", pontos: 10, feedback: "✔️ Excelente! Evita desperdício e mantém organização." },
+      { texto: "C) Deixa acumulando para usar depois.", pontos: 5, feedback: "⚠️ Ainda gera risco de perda ou vencimento." }
     ]
   }
 ];
@@ -111,9 +141,10 @@ let escolhaAtual = null;
 
 function mostrarCenario() {
   if (atual >= cenarios.length) {
-    let msg = pontos >= 30 ? "🏆 Você é um Gestor de Estoque Nota 10!" : "⚠️ Precisa melhorar suas práticas de organização.";
+    let medalha = pontos >= 60 ? "🥇 Mestre do Estoque" : pontos >= 40 ? "🥈 Organizador Experiente" : "🥉 Aprendiz de Estoque";
     document.getElementById("jogo").innerHTML = "";
-    document.getElementById("resultado").innerText = `Fim de jogo! Você fez ${pontos} pontos. ${msg}`;
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("resultado").innerText = `Fim de jogo! Você fez ${pontos} pontos.\n${medalha}`;
     document.getElementById("barra").style.width = "100%";
     return;
   }
@@ -126,17 +157,20 @@ function mostrarCenario() {
   html += `<button id="proximo" onclick="proximo()" style="display:none;">➡ Próximo</button></div>`;
   document.getElementById("jogo").innerHTML = html;
 
-  // Atualizar barra de progresso
   const progresso = (atual / cenarios.length) * 100;
   document.getElementById("barra").style.width = progresso + "%";
+  document.getElementById("feedback").innerText = "";
 }
 
 function selecionar(i) {
   escolhaAtual = i;
+  const feedback = cenarios[atual].opcoes[i].feedback;
+  document.getElementById("feedback").innerText = feedback;
+
   // Esconde todos os botões de resposta
   const botoes = document.querySelectorAll(".cenario button");
   botoes.forEach(btn => btn.style.display = "none");
-  // Mostra botão próximo
+
   document.getElementById("proximo").style.display = "block";
 }
 
